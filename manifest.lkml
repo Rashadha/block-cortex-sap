@@ -14,7 +14,7 @@ constant: REPORTING_DATASET {
 }
 
 constant: CLIENT {
-  value: "ccc"
+  value: "lankatiles-cortex"
   export: override_required
 }
 
