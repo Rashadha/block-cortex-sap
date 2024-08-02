@@ -1,4 +1,5 @@
-#########################################################{
+
+ #########################################################{
 # Balance Sheet financial report using Report Table visualization (available for free on Looker Marketplace)
 # extends filters and title summary from balance_sheet_template
 # customizations:
