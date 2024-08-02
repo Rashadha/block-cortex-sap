@@ -1,13 +1,19 @@
 
 view: sql_runner_query {
   derived_table: {
-    sql: SELECT
-        TaxJurisdiction_TXJCD,
-        SUM(TaxAmount_MWSBK) AS total_tax_amount,
-        SUM(TaxAmountPos_MWSBP) AS total_tax_amount_pos
-      FROM `lankatiles-cortex.CORTEX_SAP_REPORTING.Billing`
+    sql: -- raw sql results do not include filled-in values for 'data_intelligence_ar.Current_Date'
+
+
+      SELECT
+          (DATE(cast((CURRENT_TIMESTAMP()) as timestamp) )) AS data_intelligence_ar_current_date_1
+      FROM `lankatiles-cortex.CORTEX_SAP_REPORTING.AccountingDocumentsReceivable`
+           AS data_intelligence_ar
+      WHERE (data_intelligence_ar.Client_MANDT = "100" )
       GROUP BY
-        TaxJurisdiction_TXJCD ;;
+          1
+      ORDER BY
+          1 DESC
+      LIMIT 500 ;;
   }
 
   measure: count {
@@ -15,26 +21,15 @@ view: sql_runner_query {
     drill_fields: [detail*]
   }
 
-  dimension: tax_jurisdiction_txjcd {
-    type: string
-    sql: ${TABLE}.TaxJurisdiction_TXJCD ;;
-  }
-
-  dimension: total_tax_amount {
-    type: number
-    sql: ${TABLE}.total_tax_amount ;;
-  }
-
-  dimension: total_tax_amount_pos {
-    type: number
-    sql: ${TABLE}.total_tax_amount_pos ;;
+  dimension: data_intelligence_ar_current_date_1 {
+    type: date
+    datatype: date
+    sql: ${TABLE}.data_intelligence_ar_current_date_1 ;;
   }
 
   set: detail {
     fields: [
-        tax_jurisdiction_txjcd,
-	total_tax_amount,
-	total_tax_amount_pos
+      data_intelligence_ar_current_date_1
     ]
   }
 }
